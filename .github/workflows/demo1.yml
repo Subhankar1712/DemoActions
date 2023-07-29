@@ -1,9 +1,32 @@
-- name: Cache
-  uses: actions/cache@v1.2.1
-  with:
-    # A directory to store and save the cache
-    path: 
-    # An explicit key for restoring and saving the cache
-    key: 
-    # An ordered list of keys to use for restoring the cache if no cache hit occurred for key
-    restore-keys: # optional
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: hello-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: hello-world
+    spec:
+      containers:
+      - name: hello
+        image: nginxdemos/hello:latest
+        ports:
+        - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-service
+  labels:
+    run: hello-world
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    run: hello-world
